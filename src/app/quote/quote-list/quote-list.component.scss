@@ -1,0 +1,27 @@
+@import '../../../styles.scss';
+
+:host > mat-card {
+    margin: 0 1.75rem;
+}
+
+div.quotes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+mat-card.quote {
+    flex: 1 0 calc(33.333% - 1rem);
+    min-height: 10rem;
+    max-height: $max-height-card-quote;
+    max-width: $max-width-card-quote + 2rem;
+    margin: 0 auto 0.25rem;
+
+    mat-form-field {
+        display: flex;
+
+        textarea {
+            max-height: 4rem;
+        }
+    }
+}
