@@ -1,7 +1,7 @@
 @import '../../../styles.scss';
 
 mat-expansion-panel {
-    width: $max-width-card-quote + 4rem;
+    max-width: $max-width-card-quote + 4rem;
     margin: 0 auto;
 
     mat-panel-title {
@@ -12,7 +12,7 @@ mat-expansion-panel {
 mat-card {
     min-height: 10rem;
     max-height: $max-height-card-quote;
-    width: $max-width-card-quote;
+    max-width: $max-width-card-quote;
     margin: 0 auto 5rem;
 
     mat-form-field {

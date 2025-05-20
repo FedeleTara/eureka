@@ -7,21 +7,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { QuoteGenerated } from '../../models';
 import { FirestoreService } from '../../services/firestore.service';
 import { startWith, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-quote-suggest',
-  imports: [MatCardModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatIconModule, MatExpansionModule],
+  imports: [MatCardModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatIconModule, MatExpansionModule, MatProgressSpinnerModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-accordion>
-      <mat-expansion-panel>
+      <mat-expansion-panel [(expanded)]="expanded">
         <mat-expansion-panel-header>
           <mat-panel-title> Idea! (Suggestion) </mat-panel-title>
         </mat-expansion-panel-header>
-
         <ng-template matExpansionPanelContent>
           <mat-card>
             <mat-card-content>
@@ -36,11 +36,11 @@ import { startWith, Subject, switchMap } from 'rxjs';
             </mat-card-content>
             <mat-card-footer>
               <mat-card-actions>
-                <button mat-fab extended (click)="refresh()">
+                <button mat-fab extended [disabled]="disabled" (click)="refresh()">
                   <mat-icon>refresh</mat-icon>
                   Suggest me another one
                 </button>
-                <button mat-fab extended (click)="save()">
+                <button mat-fab extended [disabled]="disabled" (click)="save()">
                   <mat-icon>add</mat-icon>
                   Save
                 </button>
@@ -58,6 +58,9 @@ export class QuoteSuggestComponent implements OnInit {
 
   quote = signal<Partial<QuoteGenerated>>({});
 
+  expanded = false;
+  disabled = true;
+
   #apiNinjas = inject(ApiNinjasService);
   #firestore = inject(FirestoreService);
   #destroyRef = inject(DestroyRef);
@@ -71,10 +74,15 @@ export class QuoteSuggestComponent implements OnInit {
       )
       .subscribe((res) => {
         this.quote.set(res[0]);
+        this.disabled = false;
       });
   }
 
   refresh(): void {
+    // Disabilita i bottoni
+    this.disabled = true;
+    
+    // Refresh
     this.#refresh$.next();
   }
 
@@ -87,6 +95,9 @@ export class QuoteSuggestComponent implements OnInit {
 
     // Salva i dati su Firebase
     this.#firestore.putQuote(data);
+
+    // Chiude l'accordion
+    this.expanded = false;
 
     // Refresh della suggestion
     this.refresh();

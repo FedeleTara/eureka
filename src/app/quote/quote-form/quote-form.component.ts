@@ -15,10 +15,12 @@ import { FirestoreService } from '../../services/firestore.service';
     <mat-card>
       <mat-card-content>
         <form [formGroup]="form" (submit)="save()">
-          <button mat-fab extended [class.pop]="!form.invalid">
-            <mat-icon>add</mat-icon>
-            Save
-          </button>
+          <mat-card-actions>
+            <button mat-fab extended [disabled]="form.invalid || this.form.value.sentence!.trim().length < 10">
+              <mat-icon>add</mat-icon>
+              Save
+            </button>
+          </mat-card-actions>
           <mat-form-field>
             <mat-label>Author</mat-label>
             <input

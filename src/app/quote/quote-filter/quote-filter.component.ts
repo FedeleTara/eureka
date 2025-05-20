@@ -33,13 +33,13 @@ export class QuoteFilterComponent {
 
   filter = output<{ author: string, sentence: string[] }>();
   
-  #trimfilter() {
-    this.author = this.author.trim();
-    this.sentence = this.sentence.trim();
+  #trimForm() {
+    this.author = this.author.trimStart();
+    this.sentence = this.sentence.trimStart();
   }
   
   emit() {
-    this.#trimfilter();  // Cleaning the input
+    this.#trimForm();  // Cleaning the input
 
     this.filter.emit({
       author: this.author,
