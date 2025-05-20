@@ -21,11 +21,21 @@ import { FirestoreService } from '../../firestore.service';
           </button>
           <mat-form-field>
             <mat-label>Author</mat-label>
-            <input matInput formControlName="author">
+            <input
+              matInput
+              formControlName="author"
+            >
           </mat-form-field>
           <mat-form-field>
             <mat-label>Brilliant Quote</mat-label>
-            <textarea matInput cdkTextareaAutosize cdkAutosizeMaxRows="6" formControlName="sentence" placeholder="Lorem Ipsum" required></textarea>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMaxRows="6"
+              formControlName="sentence"
+              placeholder="Lorem Ipsum"
+              required
+            ></textarea>
             @if (form.controls.sentence.errors) {
               <mat-error>Please, write/paste some text if you want to save the quote</mat-error>
             }
@@ -46,11 +56,11 @@ export class QuoteFormComponent {
   #firestore = inject(FirestoreService);
 
   save(): void {
-    if (this.form.controls.sentence.errors || !this.form.value.sentence) return;
+    if (this.form.controls.sentence.errors || !this.form.value.sentence || this.form.value.sentence.trim().length < 10) return;
 
     const data = {
-      author: this.form.value.author?.length ? this.form.value.author : 'Anonymous',
-      sentence: this.form.value.sentence,
+      author: this.form.value.author?.length ? this.form.value.author.trim() : '',
+      sentence: this.form.value.sentence.trim(),
       date_creation: new Date().toISOString()
     } as const;
 

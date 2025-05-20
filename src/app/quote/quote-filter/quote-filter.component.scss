@@ -1,0 +1,13 @@
+:host {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+}
+
+.author {
+    flex: 20%;
+}
+
+.sentence {
+    flex: 80%;
+}
