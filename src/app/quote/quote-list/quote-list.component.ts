@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Quote } from '../../models';
-import { FirestoreService } from '../../firestore.service';
+import { FirestoreService } from '../../services/firestore.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -96,7 +96,9 @@ export class QuoteListComponent {
     // Retrieve quotes form firebase
     this.#firestore.getQuotes()
       .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe((res) => this.quotes.set(res));
+      .subscribe((res) => {
+        this.quotes.set(res)
+      });
   }
 
   copyQuote(quote: Quote) {

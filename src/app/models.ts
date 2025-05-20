@@ -4,3 +4,9 @@ export type Quote = {
     date_creation: string;
     id: string;
 }
+
+export type QuoteGenerated = {
+    author: string;
+    category: string;
+    quote: string;
+};
