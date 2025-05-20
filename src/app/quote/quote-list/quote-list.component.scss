@@ -17,6 +17,10 @@ mat-card.quote {
     max-width: $max-width-card-quote + 2rem;
     margin: 0 auto 0.25rem;
 
+    mat-card-actions {
+        justify-content: flex-end;
+    }
+
     mat-form-field {
         display: flex;
 

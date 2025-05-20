@@ -6,10 +6,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { QuoteFilterComponent } from '../quote-filter/quote-filter.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-quote-list',
-  imports: [MatCardModule, MatInputModule, MatFormFieldModule, QuoteFilterComponent],
+  imports: [MatCardModule, MatInputModule, MatFormFieldModule, QuoteFilterComponent, MatButtonModule, MatIconModule, ClipboardModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
@@ -29,6 +33,11 @@ import { QuoteFilterComponent } from '../quote-filter/quote-filter.component';
         <div class="quotes">
           @for(quote of this.filtered(); track quote.id) {
             <mat-card class="quote">
+              <mat-card-actions>              
+                <button mat-mini-fab [cdkCopyToClipboard]="copyQuote(quote)" (cdkCopyToClipboardCopied)="openSnackBar()">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+              </mat-card-actions>
               <mat-card-content>
                 <mat-form-field>
                   <mat-label>Author</mat-label>
@@ -79,6 +88,7 @@ export class QuoteListComponent {
     return filteredQuotes;
   });
 
+  #snackBar = inject(MatSnackBar);
   #firestore = inject(FirestoreService);
   #destroyRef = inject(DestroyRef);
 
@@ -87,5 +97,13 @@ export class QuoteListComponent {
     this.#firestore.getQuotes()
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe((res) => this.quotes.set(res));
+  }
+
+  copyQuote(quote: Quote) {
+    return `${quote.sentence}\n(${quote.author.length ? quote.author : 'Anonymous'})`;
+  }
+
+  openSnackBar() {
+    this.#snackBar.open('Quote copied to clipboard!', 'Nice');
   }
 }
